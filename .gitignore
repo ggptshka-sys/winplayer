@@ -6,3 +6,7 @@
 *.cache
 .DS_Store
 Thumbs.db
+
+dist/
+*.zip
+
