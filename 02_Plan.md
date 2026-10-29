@@ -7,5 +7,7 @@
 - [x] Neumorphism UI, Topmost, drag
 - [x] Release build без ошибок
 - [x] Brow UI: collapse/expand + seek/time
-- [ ] Ручной тест hover / seek с Яндекс.Музыкой
-- [ ] (позже) трей, хоткеи, multi-monitor, выбор сессии
+- [x] Трей + автозапуск
+- [x] Update feed + GitHub Releases v1.0.0
+- [ ] Ручной тест обновлений у «чистого» пользователя
+- [ ] (позже) хоткеи, multi-monitor, выбор сессии, Velopack auto-install
