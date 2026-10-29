@@ -1,0 +1,157 @@
+﻿<Window x:Class="WinPlayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WinPlayer"
+        Width="320" Height="68"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        Topmost="True"
+        ShowInTaskbar="False"
+        WindowStartupLocation="Manual"
+        MouseEnter="Window_MouseEnter"
+        MouseLeave="Window_MouseLeave">
+
+  <Border x:Name="Shell"
+          CornerRadius="0,0,22,22"
+          Background="{StaticResource GlassFillBrush}"
+          BorderBrush="{StaticResource GlassStrokeBrush}"
+          BorderThickness="1,0,1,1"
+          Padding="16,10,16,16"
+          VerticalAlignment="Top"
+          SnapsToDevicePixels="True"
+          ClipToBounds="False">
+    <Grid ClipToBounds="False">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <DockPanel x:Name="ExpandedHeader"
+                 Grid.Row="0"
+                 LastChildFill="True"
+                 Visibility="Collapsed"
+                 Opacity="0"
+                 Margin="0,0,0,8"
+                 RenderTransformOrigin="0.5,0">
+        <DockPanel.RenderTransform>
+          <TranslateTransform x:Name="HeaderSlide" Y="0"/>
+        </DockPanel.RenderTransform>
+        <Button x:Name="MoreButton"
+                DockPanel.Dock="Right"
+                Content="&#xE712;"
+                Style="{StaticResource GhostCloseButton}"
+                Click="More_Click"
+                ToolTip="Меню"
+                VerticalAlignment="Top"
+                Margin="10,0,0,0">
+          <Button.ContextMenu>
+            <ContextMenu x:Name="MoreMenu"
+                         Style="{StaticResource GlassContextMenu}"
+                         Opened="MoreMenu_Opened"
+                         Closed="MoreMenu_Closed">
+              <MenuItem x:Name="AutostartMenuItem"
+                        Header="Автозапуск"
+                        Style="{StaticResource GlassMenuItem}"
+                        Click="Autostart_Click"/>
+              <MenuItem Header="Скрыть в трей" Style="{StaticResource GlassMenuItem}" Click="HideToTray_Click"/>
+              <Separator Style="{StaticResource GlassMenuSeparator}"/>
+              <MenuItem Header="Об авторе" Style="{StaticResource GlassMenuItem}" Click="About_Click"/>
+              <MenuItem Header="Выход" Style="{StaticResource GlassMenuItem}" Click="Exit_Click"/>
+            </ContextMenu>
+          </Button.ContextMenu>
+        </Button>
+        <StackPanel VerticalAlignment="Center">
+          <TextBlock Text="W · PLAYER"
+                     Foreground="{StaticResource TextDimBrush}"
+                     FontSize="10"
+                     FontWeight="SemiBold"
+                     FontFamily="{StaticResource UiFont}"
+                     Margin="0,0,0,4"/>
+          <TextBlock x:Name="TitleText"
+                     Text="Нет активного медиа"
+                     Foreground="{StaticResource TextPrimaryBrush}"
+                     FontSize="18"
+                     FontWeight="SemiBold"
+                     FontFamily="{StaticResource UiFont}"
+                     TextTrimming="CharacterEllipsis"/>
+          <TextBlock x:Name="ArtistText"
+                     Text=""
+                     Foreground="{StaticResource TextMutedBrush}"
+                     FontSize="12"
+                     FontFamily="{StaticResource UiFont}"
+                     TextTrimming="CharacterEllipsis"
+                     Margin="0,3,0,0"/>
+        </StackPanel>
+      </DockPanel>
+
+      <Grid x:Name="ExpandedSeek"
+            Grid.Row="1"
+            Visibility="Collapsed"
+            Opacity="0"
+            Margin="0,0,0,8"
+            RenderTransformOrigin="0.5,0">
+        <Grid.RenderTransform>
+          <TranslateTransform x:Name="SeekSlide" Y="0"/>
+        </Grid.RenderTransform>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="40"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="40"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="PositionText"
+                   Grid.Column="0"
+                   Text="0:00"
+                   Foreground="{StaticResource TextDimBrush}"
+                   FontSize="11"
+                   VerticalAlignment="Center"
+                   FontFamily="{StaticResource UiFont}"/>
+        <Slider x:Name="SeekSlider"
+                Grid.Column="1"
+                Style="{StaticResource SeekSlider}"
+                PreviewMouseDown="SeekSlider_PreviewMouseDown"
+                PreviewMouseUp="SeekSlider_PreviewMouseUp"
+                ValueChanged="SeekSlider_ValueChanged"/>
+        <TextBlock x:Name="DurationText"
+                   Grid.Column="2"
+                   Text="0:00"
+                   Foreground="{StaticResource TextDimBrush}"
+                   FontSize="11"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   FontFamily="{StaticResource UiFont}"/>
+      </Grid>
+
+      <StackPanel Grid.Row="2"
+                  Orientation="Horizontal"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center">
+        <Button x:Name="PrevButton"
+                Style="{StaticResource GlassButton}"
+                Content="&#xE892;"
+                Click="Prev_Click"
+                ToolTip="Предыдущий"
+                Margin="0,0,8,0"/>
+        <Button x:Name="PlayPauseButton"
+                Style="{StaticResource GlassButton}"
+                Content="&#xE768;"
+                Click="PlayPause_Click"
+                ToolTip="Play / Pause"
+                Margin="0,0,8,0"/>
+        <Button x:Name="NextButton"
+                Style="{StaticResource GlassButton}"
+                Content="&#xE893;"
+                Click="Next_Click"
+                ToolTip="Следующий"
+                Margin="0,0,8,0"/>
+        <Button x:Name="MuteButton"
+                Style="{StaticResource GlassButton}"
+                Content="&#xE767;"
+                Click="Mute_Click"
+                ToolTip="Mute / Unmute"/>
+      </StackPanel>
+    </Grid>
+  </Border>
+</Window>
