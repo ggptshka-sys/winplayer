@@ -4,6 +4,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using WinPlayer.Services;
+using WinPlayer.Windows;
 
 namespace WinPlayer;
 
@@ -49,7 +50,7 @@ public partial class MainWindow : Window
 
         _tray.ShowRequested += (_, _) => Dispatcher.Invoke(ShowFromTray);
         _tray.ExitRequested += (_, _) => Dispatcher.Invoke(ExitApp);
-        _tray.AutostartChanged += (_, _) => Dispatcher.Invoke(RefreshAutostartMenuHeader);
+        _tray.AutostartChanged += (_, _) => { /* tray checkbox already applied */ };
         _tray.CheckUpdatesRequested += (_, _) => Dispatcher.InvokeAsync(() => CheckForUpdatesAsync(userInitiated: true));
 
         Loaded += OnLoaded;
@@ -70,7 +71,6 @@ public partial class MainWindow : Window
     {
         PinToTopCenter();
         Height = CollapsedHeight;
-        RefreshAutostartMenuHeader();
 
         try
         {
@@ -111,7 +111,7 @@ public partial class MainWindow : Window
 
         if (result.UpdateAvailable && result.Manifest is not null && result.RemoteVersion is not null)
         {
-            _tray.NotifyUpdateAvailable(result.Manifest, result.RemoteVersion);
+            ShowUpdateWindow(result.Manifest, result.RemoteVersion);
             return;
         }
 
@@ -119,6 +119,21 @@ public partial class MainWindow : Window
         {
             _tray.NotifyNoUpdate(UpdateService.GetCurrentVersionDisplay());
         }
+    }
+
+    private void ShowUpdateWindow(UpdateManifest manifest, Version remoteVersion)
+    {
+        var dialog = new UpdateWindow(manifest, remoteVersion)
+        {
+            Owner = IsVisible ? this : null
+        };
+        dialog.ShowDialog();
+    }
+
+    private void ShowDialog(Window dialog)
+    {
+        dialog.Owner = IsVisible ? this : null;
+        dialog.ShowDialog();
     }
 
     private void OnClosing(object? sender, System.ComponentModel.CancelEventArgs e)
@@ -157,13 +172,6 @@ public partial class MainWindow : Window
     {
         _forceExit = true;
         Close();
-    }
-
-    private void RefreshAutostartMenuHeader()
-    {
-        var on = AutostartService.IsEnabled();
-        AutostartMenuItem.Header = on ? "Автозапуск  ✓" : "Автозапуск";
-        _tray.RefreshAutostartState();
     }
 
     private void OnSessionChanged(object? sender, EventArgs e)
@@ -463,20 +471,12 @@ public partial class MainWindow : Window
 
     private void HideToTray_Click(object sender, RoutedEventArgs e) => HideToTray();
 
-    private void Exit_Click(object sender, RoutedEventArgs e) => ExitApp();
-
-    private void Autostart_Click(object sender, RoutedEventArgs e)
+    private void Settings_Click(object sender, RoutedEventArgs e)
     {
-        AutostartService.Toggle();
-        RefreshAutostartMenuHeader();
+        var settings = new SettingsWindow();
+        settings.HideToTrayRequested += (_, _) => HideToTray();
+        ShowDialog(settings);
     }
 
-    private void About_Click(object sender, RoutedEventArgs e)
-    {
-        System.Windows.MessageBox.Show(
-            "WinPlayer — компактный SMTC-виджет.\nMVP для управления медиа с рабочего стола.",
-            "Об авторе",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
-    }
+    private void About_Click(object sender, RoutedEventArgs e) => ShowDialog(new AboutWindow());
 }

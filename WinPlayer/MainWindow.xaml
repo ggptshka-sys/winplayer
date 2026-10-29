@@ -52,14 +52,10 @@
                          Style="{StaticResource GlassContextMenu}"
                          Opened="MoreMenu_Opened"
                          Closed="MoreMenu_Closed">
-              <MenuItem x:Name="AutostartMenuItem"
-                        Header="Автозапуск"
-                        Style="{StaticResource GlassMenuItem}"
-                        Click="Autostart_Click"/>
-              <MenuItem Header="Скрыть в трей" Style="{StaticResource GlassMenuItem}" Click="HideToTray_Click"/>
-              <Separator Style="{StaticResource GlassMenuSeparator}"/>
+              <MenuItem Header="Настройки" Style="{StaticResource GlassMenuItem}" Click="Settings_Click"/>
               <MenuItem Header="Об авторе" Style="{StaticResource GlassMenuItem}" Click="About_Click"/>
-              <MenuItem Header="Выход" Style="{StaticResource GlassMenuItem}" Click="Exit_Click"/>
+              <Separator Style="{StaticResource GlassMenuSeparator}"/>
+              <MenuItem Header="Выход" Style="{StaticResource GlassMenuItem}" Click="HideToTray_Click"/>
             </ContextMenu>
           </Button.ContextMenu>
         </Button>
